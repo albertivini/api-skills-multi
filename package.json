@@ -7,8 +7,8 @@
     "node": "14.17.0"
   },
   "scripts": {
-    "dev": "ts-node-dev src/index.ts",
-    "start": "node src/index.js",
+    "dev": "ts-node-dev src/server.ts",
+    "start": "node src/server.js",
     "build": "tsc"
   },
   "dependencies": {
