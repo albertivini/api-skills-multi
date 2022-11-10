@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Skill {
+  id                String              @id @default(uuid())
+  skill_code        String              @unique
+  description       String?
+  year              String[]
+  @@map("skills")
+}
+
+model Exam {
+  id                String              @id @default(uuid())
+  name              String
+  total_points      Int
+  class_id          String
+  exam_date         String
+  skill_ids         String[]
+
+  @@map("exams")
+}
+
+model ExamSkills {
+  id       String @id @default(uuid())
+  skill_id String
+  points   Int
+  class_id String
+  exam_id  String
+
+  @@map("exams_skills")
+}
+
+model Student {
+  id                String              @id @default(uuid())
+  name              String
+  schoolar_year     String
+  class_id          String
+
+  @@map("students")
+}
+
+model StudentExam {
+  id           String  @id @default(uuid())
+  student_id   String
+  exam_id      String
+  class_id     String
+  total_points Int
+
+  @@map("students_exams")
+}
+
+model StudentExamSkills {
+  id           String  @id @default(uuid())
+  student_id   String
+  exam_id      String
+  skill_id     String
+  skill_points Int?
+  class_id     String
+
+  @@map("students_exams_skills")
+}
