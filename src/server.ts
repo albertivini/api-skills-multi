@@ -4,10 +4,13 @@ import { routes } from "./routes/routes"
 
 const app = express()
 
-app.use(json())
-app.use(routes)
+app.use(cors({
+    origin: '*'
+}))
 
-app.use(cors())
+app.use(json())
+
+app.use(routes)
 
 app.listen(process.env.PORT || 3000)
 
