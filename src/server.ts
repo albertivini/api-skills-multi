@@ -7,13 +7,7 @@ const app = express()
 app.use(json())
 app.use(routes)
 
-app.use((req: Request, res: Response, next: NextFunction) => {
-    
-    res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE")
-    app.use(cors())
-    next()
-})
+app.use(cors())
 
 app.listen(process.env.PORT || 3000)
 
