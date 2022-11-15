@@ -12,6 +12,12 @@ export class ReportTotalSkillStudents {
                 class_id
             }
         })
+
+        const exam_response = await prisma.examSkills.findMany({
+            where: {
+                class_id
+            }
+        })
         
         const skill_ids = db_response.map(response => response.skill_id)
 
@@ -26,19 +32,28 @@ export class ReportTotalSkillStudents {
         for (const skill of skill_ids_unique) {
             const skilled_arr = db_response.filter(response => response.skill_id === skill)
 
+            const exam_skill_arr = exam_response.filter(response => response.skill_id === skill)
+
+            const points_distributed_by_skill = exam_skill_arr.reduce((qtd_acumulada, qtd_atual) => {
+                return qtd_acumulada + qtd_atual.points
+            }, 0)
+
             const arr_lenght = skilled_arr.length
 
-            const total_points = skilled_arr.reduce((qtd_acumulada, qtd_atual) => {
+            const total_points_distributed = Number((points_distributed_by_skill * arr_lenght).toFixed(2))
+
+            const total_points_received = skilled_arr.reduce((qtd_acumulada, qtd_atual) => {
                 return qtd_acumulada + qtd_atual.skill_points
             }, 0)
 
-            const skill_average = total_points / arr_lenght
+            const skill_average = total_points_received / arr_lenght
 
-            const skill_percentage = Number(((total_points * 100) / total_points_all_skills).toFixed(2))
+            const skill_percentage = Number(((total_points_received * 100) / total_points_all_skills).toFixed(2))
 
             const response_object = {
                 skill_id: skill,
-                total_points,
+                total_points_distributed,
+                total_points_received,
                 average_points: skill_average,
                 skill_percentage
             }
